@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
   // Création du volume
   load_mbr();
   if (vol >= mbr.nb_vol) {
-    fprintf(stderr, "Le volume %d n'estpas présent\n", vol);
+    fprintf(stderr, "Le volume %d n'est pas présent\n", vol);
     exit(EXIT_FAILURE);
   }
   for (i = vol; i < mbr.nb_vol-1;i++){
