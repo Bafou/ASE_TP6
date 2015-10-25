@@ -13,10 +13,11 @@ int load_mbr() {
     mbr.nb_vol = 0;
     return 0;
   }
-  return 1;
+  else {  
+    return 1;
+  }
 }
 
 void save_mbr() {
   write_sectorn(0, 0, (unsigned char *) & mbr, sizeof(struct mbr_s));
 }
-  

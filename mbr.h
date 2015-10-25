@@ -13,17 +13,17 @@ enum type_e {
   OTHER
 };
 
-struct descriptor_s {
-  unsigned int cylinder;
-  unsigned int sector;
-  unsigned int size;
-  enum type_e type;
+struct volume_s {
+  unsigned int cylinder; // begining cylinder
+  unsigned int sector; // begining sector
+  unsigned int size; // nb of sectors
+  enum type_e type; // the of the volume
 };
 
 struct mbr_s {
   int magic;
   unsigned nb_vol;
-  struct descriptor_s vol[MAX_VOL];
+  struct volume_s vol[MAX_VOL];
 };
 
 extern struct mbr_s mbr;

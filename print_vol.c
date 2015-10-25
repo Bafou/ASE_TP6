@@ -15,8 +15,12 @@ char* get_type(int type) {
   else if (type == ANNEXE) {
     return "ANNEXE";
   }
-  else {
+  else if (type == OTHER) {
     return "OTHER";
+  }
+  else {
+    fprintf(stderr, "Type inconnu (ANNEXE|BASE|OTHER)\n");
+    assert(0);
   }
 }
 
@@ -28,17 +32,17 @@ empty_it()
 
 int main() {
   int i;
-  
+
   // Initialisation
   assert(init_hardware(HARDWARE_INI));
   for(i = 0; i < 15; i++)
     IRQVECTOR[i] = empty_it;
 
-  if (load_mbr()) {
+  if (load_mbr() == 1) {
     printf("Chargement normal du MBR\n");
   }
   else {
-    printf("Initialisation d'un MBR\n");
+    printf("Initialisation du MBR\n");
   }
 
   printf("Il y a %d partions\n",mbr.nb_vol);

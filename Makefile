@@ -1,13 +1,19 @@
 CC=gcc
 CFLAGS=-m32 -g
 CLIB=-I./include -L./lib -lhardware
-EXEC=dmps frmt frmt_reverse print_vol
+EXEC=dmps frmt frmt_reverse print_vol create_vol remove_vol
 
 
 all: $(EXEC)
 
 print_vol : print_vol.o mbr.o volume.o Driver.o
 	$(CC) -o $@ $^ $(CFLAGS) $(CLIB)
+
+create_vol : create_vol.o mbr.o volume.o Driver.o
+		$(CC) -o $@ $^ $(CFLAGS) $(CLIB)
+
+remove_vol : remove_vol.o mbr.o volume.o Driver.o
+				$(CC) -o $@ $^ $(CFLAGS) $(CLIB)
 
 dmps: dmps.o Driver.o
 	$(CC) -o $@ $^ $(CFLAGS) $(CLIB)
