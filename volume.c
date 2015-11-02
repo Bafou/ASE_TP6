@@ -45,3 +45,17 @@ void read_blocn(unsigned int vol, unsigned int bloc, unsigned char *buffer, unsi
 void write_blocn(unsigned int vol, unsigned int bloc, unsigned char *buffer, unsigned int bufsize) {
   write_sectorn(cob(vol,bloc), sob(vol,bloc), buffer, bufsize);
 }
+
+void load_super(unsigned int vol) {
+  read_blocn(vol,0,(unsigned char*) &superbloc,sizeof(struct superbloc));
+  current_vol = vol;
+  return;
+}
+
+void save_super() {
+  write_blocn(vol,0,(unsigned char *) &superbloc, sizeof(struct superbloc_s));
+}
+void init_super(unsigned int vol, char* name) {
+  load_super(vol);
+
+}
