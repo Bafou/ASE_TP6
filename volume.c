@@ -1,3 +1,7 @@
+/*
+ * volume.c
+ * Authors : Honoré NINTUNZE & Antoine PETIT
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -52,10 +56,28 @@ void load_super(unsigned int vol) {
   return;
 }
 
-void save_super() {
+void save_super(unsigned int vol) {
   write_blocn(vol,0,(unsigned char *) &superbloc, sizeof(struct superbloc_s));
 }
 void init_super(unsigned int vol, char* name) {
+  int i;
   load_super(vol);
-
+  if (superbloc.magic == MAGIC_SB) {
+    fprintf(stderr, "Superbloc déjà initialisé.\n");
+    exit(EXIT_FAILURE);
+  }
+  else {
+    int l;
+    superbloc.magic = MAGIC_SB;
+    superbloc.name = name;
+    superbloc.first_free_bloc = 1;
+    superbloc.root = 0;
+    superbloc.nb_free = mbr.vol[vol].size-1;
+    save_super();
+    for (i = 1, l = mbr[vol].size; i < l; i++) {
+      struct free_bloc_s fb;
+      fb.next = (i+1)%mbr[vol].size;
+      write_blocn(vol, i, (unsigned char *) &fb, sizeof(struct free_bloc_s));
+    }
+  }
 }

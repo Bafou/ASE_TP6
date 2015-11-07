@@ -36,6 +36,9 @@ mbr.o : mbr.c mbr.h Driver.o
 volume.o : volume.c volume.h mbr.o Driver.o
 	$(CC) -o $@ -c $< $(CFLAGS) $(CLIB)
 
+alloc.o : alloc.c alloc.h mbr.o volume.o Driver.o
+	$(CC) -o $@ -c $< $(CFLAGS) $(CLIB)
+
 %.o : %.c
 	$(CC) -o $@ -c $< $(CFLAGS)
 
