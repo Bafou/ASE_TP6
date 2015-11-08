@@ -5,10 +5,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 #include "Driver.h"
+#include "hw_config.h"
 #include "volume.h"
 #include "mbr.h"
-#include "hw_config.h"
 
 #define cob cylinder_of_bloc
 #define sob sector_of_bloc
@@ -51,7 +52,7 @@ void write_blocn(unsigned int vol, unsigned int bloc, unsigned char *buffer, uns
 }
 
 void load_super(unsigned int vol) {
-  read_blocn(vol,0,(unsigned char*) &superbloc,sizeof(struct superbloc));
+  read_blocn(vol,0,(unsigned char*) &superbloc,sizeof(struct superbloc_s));
   current_vol = vol;
   return;
 }
@@ -69,14 +70,15 @@ void init_super(unsigned int vol, char* name) {
   else {
     int l;
     superbloc.magic = MAGIC_SB;
-    superbloc.name = name;
+    strncpy(superbloc.name, name, MAX_TAILLE);
     superbloc.first_free_bloc = 1;
     superbloc.root = 0;
     superbloc.nb_free = mbr.vol[vol].size-1;
-    save_super();
-    for (i = 1, l = mbr[vol].size; i < l; i++) {
+    save_super(vol);
+    for (i = 1, l = mbr.vol[vol].size; i < l; i++) {
       struct free_bloc_s fb;
-      fb.next = (i+1)%mbr[vol].size;
+      fb.next = (i+1)%mbr.vol[vol].size;
+      fb.magic = MAGIC_FREE;
       write_blocn(vol, i, (unsigned char *) &fb, sizeof(struct free_bloc_s));
     }
   }

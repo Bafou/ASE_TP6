@@ -6,11 +6,17 @@
 #define VOLUME_H
 
 #define MAGIC_SB 0xb00b5
+#define MAGIC_FREE 0x5aa55
 #define MAX_TAILLE 32
-#define NB_BLOC (SECTOR_SIZE - 4*sizeof(int))/sizeof(int)
+#define HDA_SECTORSIZE 256
+#define NB_BLOC (HDA_SECTORSIZE - 4*sizeof(int))/sizeof(int)
 
 unsigned int current_vol;
 struct superbloc_s superbloc;
+
+enum file_type_e {
+  AFILE, ADIRECTORY
+};
 
 struct superbloc_s {
   int magic;
@@ -22,18 +28,17 @@ struct superbloc_s {
 };
 
 struct free_bloc_s {
-	unsigned int next; 
+	unsigned int next;
+  int magic;
 };
 
 struct inode_s {
-	file_type_e type;
+	enum file_type_e type;
 	int size;
 	int nb_bloc[NB_BLOC];
 	int indirect1;
 	int indirect2;
 };
-
-enum file_type_e {FILE, DIRECTORY};
 
 void read_bloc(unsigned int vol, unsigned int bloc, unsigned char *buffer);
 

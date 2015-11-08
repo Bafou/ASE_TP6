@@ -42,8 +42,28 @@ alloc.o : alloc.c alloc.h mbr.o volume.o Driver.o
 %.o : %.c
 	$(CC) -o $@ -c $< $(CFLAGS)
 
+test: realclean all
+	./create_vol 1 1 1 BASE
+	./print_vol
+	./create_vol 1 1 1 BASE
+	./create_vol 2 3 7 BASE
+	./print_vol
+	./create_vol 1 3 7 BASE
+	./print_vol
+	./create_vol 2 2 1 BASE
+	./print_vol
+	./create_vol 2 1 2 BASE
+	./print_vol
+	./create_vol 2 6 2 BASE
+	./print_vol
+	./create_vol 2 9 2 BASE
+	./print_vol
+	./create_vol 2 10 2 BASE
+	./print_vol
+	./remove_vol 3
+	./print_vol
 
-.PHONY: clean realclean
+.PHONY: clean realclean test
 
 clean:
 	rm -rf *~ *.o
