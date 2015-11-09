@@ -81,5 +81,6 @@ void init_super(unsigned int vol, char* name) {
       fb.magic = MAGIC_FREE;
       write_blocn(vol, i, (unsigned char *) &fb, sizeof(struct free_bloc_s));
     }
+    printf("Volume %d initialisé\n", vol);
   }
 }

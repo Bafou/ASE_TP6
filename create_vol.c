@@ -19,6 +19,7 @@ int main(int argc, char** argv) {
   unsigned int cylinder, sector, size;
   enum type_e type;
   struct volume_s volume;
+  char name[MAX_TAILLE];
 
   if (argc != 5) {
     printf("Usage:\n\tcreate_vol <cylinder (0 to 15)> <sector (0 to 15)> <size> <type: ANNEXE|BASE|OTHER>\n");
@@ -91,6 +92,8 @@ int main(int argc, char** argv) {
   mbr.vol[mbr.nb_vol] = volume;
   mbr.nb_vol = mbr.nb_vol+1;
   save_mbr();
+  sprintf(name, "Volume %d", mbr.nb_vol-1);
+  init_super(mbr.nb_vol-1,name);
   printf("Volume (%d, %d) de taille %d et de type %s créé.\n", cylinder, sector, size, argv[4]);
 
   return 0;

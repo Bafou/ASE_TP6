@@ -5,7 +5,7 @@
 #ifndef ALLOC_H
 #define ALLOC_H
 
-void new_bloc();
+int new_bloc();
 
 void free_bloc(unsigned int bloc);
 
