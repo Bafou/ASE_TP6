@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
   struct volume_s volume;
 
   if (argc != 5) {
-    printf("Usage:\n\tcreate_vol <cylinder (1 to 16)> <sector (1 to 16)> <size> <type: ANNEXE|BASE|OTHER>\n");
+    printf("Usage:\n\tcreate_vol <cylinder (0 to 15)> <sector (0 to 15)> <size> <type: ANNEXE|BASE|OTHER>\n");
     exit(EXIT_FAILURE);
   }
 
@@ -43,16 +43,16 @@ int main(int argc, char** argv) {
     exit(EXIT_FAILURE);
   }
 
-  if (cylinder > HDA_MAXCYLINDER || cylinder < 1){
-    printf("Usage:\n\tcreate_vol <cylinder (1 to 16)> <sector (1 to 16)> <size> <type: ANNEXE|BASE|OTHER>\n");
+  if (cylinder >= HDA_MAXCYLINDER || cylinder < 0){
+    printf("Usage:\n\tcreate_vol <cylinder (0 to 15)> <sector (0 to 15)> <size> <type: ANNEXE|BASE|OTHER>\n");
     exit(EXIT_FAILURE);
   }
-  if (sector > HDA_MAXSECTOR || sector < 1){
-    printf("Usage:\n\tcreate_vol <cylinder (1 to 16)> <sector (1 to 16)> <size> <type: ANNEXE|BASE|OTHER>\n");
+  if (sector >= HDA_MAXSECTOR || sector < 0){
+    printf("Usage:\n\tcreate_vol <cylinder (0 to 15)> <sector (0 to 15)> <size> <type: ANNEXE|BASE|OTHER>\n");
     exit(EXIT_FAILURE);
   }
   if (size > HDA_SECTORSIZE){
-    printf("Taille trop grande!\nUsage:\n\tcreate_vol <cylinder (1 to 16)> <sector (1 to 16)> <size> <type: ANNEXE|BASE|OTHER>\n");
+    printf("Taille trop grande!\nUsage:\n\tcreate_vol <cylinder (0 to 15)> <sector (0 to 15)> <size> <type: ANNEXE|BASE|OTHER>\n");
     exit(EXIT_FAILURE);
   }
 

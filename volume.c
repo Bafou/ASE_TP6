@@ -57,8 +57,8 @@ void load_super(unsigned int vol) {
   return;
 }
 
-void save_super(unsigned int vol) {
-  write_blocn(vol,0,(unsigned char *) &superbloc, sizeof(struct superbloc_s));
+void save_super() {
+  write_blocn(current_vol,0,(unsigned char *) &superbloc, sizeof(struct superbloc_s));
 }
 void init_super(unsigned int vol, char* name) {
   int i;

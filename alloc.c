@@ -20,28 +20,29 @@ int new_bloc() {
   read_blocn(current_vol, res, (unsigned char *) &fb, sizeof(struct free_bloc_s));
   superbloc.first_free_bloc = fb.next;
   superbloc.nb_free--;
-  save_super(current_vol);
+  save_super();
+  printf("Volume %d, bloc %d alloué\n",current_vol, res );
   return res;
 }
 
 void free_bloc(unsigned int bloc) {
-        struct free_bloc_s fb;
-        if ((bloc >=0) || (bloc < mbr.vol[current_vol].size)) {
-	        read_blocn(current_vol, bloc, (unsigned char *) &fb, sizeof(struct free_bloc_s));
-        	if (!(fb.magic == MAGIC_FREE)) {
-        	  unsigned int res_free = superbloc.first_free_bloc;
-	          fb.next = superbloc.first_free_bloc;
-	          superbloc.first_free_bloc = bloc;
-        	  superbloc.nb_free++;
-        	  fb.magic = MAGIC_FREE;
-        	  save_super(current_vol);
-        	  write_blocn(current_vol, bloc, (unsigned char *) &fb, sizeof(struct free_bloc_s));
-        	  return;
-        	  }
-       	        printf("Le bloc est déjà libéré\n");
-      		return;
-      		}
-      	fprintf(stderr, "Vous essayez de libérer un bloc en dehors du volume\n");
-      	return;
-    }
-
+  struct free_bloc_s fb;
+  if ((bloc >=0) && (bloc < mbr.vol[current_vol].size)) {
+    read_blocn(current_vol, bloc, (unsigned char *) &fb, sizeof(struct free_bloc_s));
+  	if (!(fb.magic == MAGIC_FREE)) {
+  	  unsigned int res_free = superbloc.first_free_bloc;
+      fb.next = superbloc.first_free_bloc;
+      superbloc.first_free_bloc = bloc;
+  	  superbloc.nb_free++;
+  	  fb.magic = MAGIC_FREE;
+  	  save_super();
+  	  write_blocn(current_vol, bloc, (unsigned char *) &fb, sizeof(struct free_bloc_s));
+      printf("Volume %d, bloc %d libéré\n",current_vol, bloc );
+  	  return;
+	  }
+	    printf("Le bloc est déjà libéré\n");
+	  return;
+	}
+	fprintf(stderr, "Vous essayez de libérer un bloc en dehors du volume\n");
+	return;
+}

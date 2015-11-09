@@ -17,9 +17,9 @@ remove_vol : remove_vol.o mbr.o volume.o Driver.o
 
 test_vol : test_vol.o
 				$(CC) -o $@ $^ $(CFLAGS)
-				
-test_alloc : test_alloc.o volume.o mbr.o
-				$(CC) -o $@ $^ $(CFLAGS)
+
+test_alloc : test_alloc.o alloc.o volume.o mbr.o Driver.o
+				$(CC) -o $@ $^ $(CFLAGS) $(CLIB)
 
 dmps: dmps.o Driver.o
 	$(CC) -o $@ $^ $(CFLAGS) $(CLIB)
