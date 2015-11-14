@@ -38,8 +38,6 @@ int main(int argc, char** argv) {
     fprintf(stderr,"Aucun bloc libre.\n");
     exit(0);
   }
-  else{
-    printf("Volume %d, bloc %d alloué\n",volume, res );
-  }
+
   return 0;
 }

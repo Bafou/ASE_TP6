@@ -16,16 +16,27 @@
 
 unsigned int cylinder_of_bloc(unsigned int vol, unsigned int bloc) {
   assert(mbr.magic == MAGIC);
-  assert(vol < mbr.nb_vol);
-  assert(bloc < mbr.vol[vol].size);
-
+  if (vol >= mbr.nb_vol || vol < 0) {
+    fprintf(stderr, "Error at 'cylinder_of_bloc' : Le volume %d n'existe pas.\n", vol);
+    exit(EXIT_FAILURE);
+  }
+  if (bloc >= mbr.vol[vol].size || bloc < 0) {
+    fprintf(stderr, "Error at 'cylinder_of_bloc' : Le bloc %d du volume %d n'existe pas.\n", bloc, vol);
+    exit(EXIT_FAILURE);
+  }
   return mbr.vol[vol].cylinder + ((bloc + mbr.vol[vol].sector)/HDA_MAXSECTOR);
 }
 
 unsigned int sector_of_bloc(unsigned int vol, unsigned int bloc) {
   assert(mbr.magic == MAGIC);
-  assert(vol < mbr.nb_vol);
-  assert(bloc < mbr.vol[vol].size);
+  if (vol >= mbr.nb_vol || vol < 0) {
+    fprintf(stderr, "Error at 'cylinder_of_bloc' : Le volume %d n'existe pas.\n", vol);
+    exit(EXIT_FAILURE);
+  }
+  if (bloc >= mbr.vol[vol].size || bloc < 0) {
+    fprintf(stderr, "Error at 'cylinder_of_bloc' : Le bloc %d du volume %d n'existe pas.\n", bloc, vol);
+    exit(EXIT_FAILURE);
+  }
 
   return ((bloc + mbr.vol[vol].sector)%HDA_MAXSECTOR);
 }

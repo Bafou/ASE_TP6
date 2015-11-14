@@ -14,14 +14,14 @@ enum file_type_e {
 };
 
 struct inode_s {
-	file_type type;
+	enum file_type_e type;
 	int size;
 	int nb_bloc[NB_BLOC];
 	int indirect1;
 	int indirect2;
 };
 
-void real_inode (unsigned int inumber, struct inode_s *inode);
+void read_inode (unsigned int inumber, struct inode_s *inode);
 
 void write_inode (unsigned int inumber, struct inode_s *inode);
 

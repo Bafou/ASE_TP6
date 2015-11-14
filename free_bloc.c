@@ -39,6 +39,5 @@ int main(int argc, char** argv) {
   }
   load_super(volume);
   free_bloc(bloc);
-  printf("Volume %d, bloc %d libéré.\n",volume, bloc );
   return 0;
 }

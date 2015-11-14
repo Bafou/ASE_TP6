@@ -25,10 +25,9 @@ int main(int argc, char** argv) {
   system("./print_vol");
   printf("\nCreation du volume 2 3 de taille 4 et de type ANNEXE\n");
   system("./create_vol 2 3 4 ANNEXE");
-  
+
   system("./print_vol");
   init_super(0,"Volume 0");
-  load_super(0);
   system("./print_vol");
   new_bloc();
   new_bloc();
