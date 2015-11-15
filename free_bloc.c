@@ -38,6 +38,11 @@ int main(int argc, char** argv) {
     exit(0);
   }
   load_super(volume);
-  free_bloc(bloc);
+  if (free_bloc(bloc) != 0) {
+    fprintf(stderr, "Impossible de libérer le bloc %d du volume %d.\n",bloc, volume );
+  }
+  else {
+    printf("Volume %d, bloc %d libéré.\n",volume, bloc );
+  }
   return 0;
 }

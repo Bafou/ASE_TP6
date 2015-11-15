@@ -7,6 +7,6 @@
 
 int new_bloc();
 
-void free_bloc(unsigned int bloc);
+int free_bloc(unsigned int bloc);
 
 #endif

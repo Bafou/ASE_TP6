@@ -6,7 +6,9 @@
 #define INODE_H
 
 #define HDA_SECTORSIZE 256
-#define NB_BLOC (HDA_SECTORSIZE - 4*sizeof(int))/sizeof(int)
+#define MAGIC_INODE 0xc1cad0
+#define NB_ENTRIES_DIRECT (HDA_SECTORSIZE - 5*sizeof(int))/sizeof(int)
+#define NB_ENTRIES_INDIRECT HDA_SECTORSIZE/sizeof(int)
 
 
 enum file_type_e {
@@ -15,8 +17,9 @@ enum file_type_e {
 
 struct inode_s {
 	enum file_type_e type;
+  int magic;
 	int size;
-	int nb_bloc[NB_BLOC];
+	int entries[NB_ENTRIES_DIRECT];
 	int indirect1;
 	int indirect2;
 };

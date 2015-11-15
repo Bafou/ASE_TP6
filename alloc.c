@@ -22,11 +22,10 @@ int new_bloc() {
   write_blocn(current_vol, res, (unsigned char *) &fb, sizeof(struct free_bloc_s));
   superbloc.nb_free--;
   save_super();
-  printf("Volume %d, bloc %d alloué.\n",current_vol, res );
   return res;
 }
 
-void free_bloc(unsigned int bloc) {
+int free_bloc(unsigned int bloc) {
   struct free_bloc_s fb;
   if ((bloc >=0) && (bloc < mbr.vol[current_vol].size)) {
     read_blocn(current_vol, bloc, (unsigned char *) &fb, sizeof(struct free_bloc_s));
@@ -38,12 +37,9 @@ void free_bloc(unsigned int bloc) {
   	  fb.magic = MAGIC_FREE;
   	  save_super();
   	  write_blocn(current_vol, bloc, (unsigned char *) &fb, sizeof(struct free_bloc_s));
-      printf("Volume %d, bloc %d libéré.\n",current_vol, bloc );
-  	  return;
+  	  return 0;
 	  }
-	  printf("Le bloc est déjà libéré\n");
-	  return;
+	  return - 1;
 	}
-	fprintf(stderr, "Vous essayez de libérer un bloc en dehors du volume\n");
-	return;
+	return -2;
 }
