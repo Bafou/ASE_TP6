@@ -32,4 +32,6 @@ unsigned int create_inode (enum file_type_e type);
 
 int delete_inode (unsigned int inumber);
 
+unsigned int vbloc_of_fbloc(unsigned int inumber, unsigned int fbloc, int do_allocate);
+
 #endif

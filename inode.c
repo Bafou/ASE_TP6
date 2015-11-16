@@ -16,7 +16,7 @@ void read_inode (unsigned int inumber, struct inode_s * inode) {
   read_blocn(current_vol, inumber, (unsigned char*) inode,sizeof(struct inode_s));
   if (inode->magic != MAGIC_INODE) {
     inode = NULL;
-    fprintf(stderr, "Error 'read_inode' : inode corrompu.\n");
+    fprintf(stderr, "Erreur 'read_inode' : inode corrompu.\n");
     exit(EXIT_FAILURE);
   }
 }
@@ -34,7 +34,7 @@ unsigned int create_inode (enum file_type_e type) {
   inode.type = type;
   allocated = new_bloc();
   if (allocated < 0) {
-    fprintf(stderr, "Impossible de créer un nouvel inoeud.\n");
+    fprintf(stderr, "Erreur 'create_inode' : Impossible de créer un nouvel inoeud.\n");
     return 0;
   }
   inode.magic = MAGIC_INODE;
@@ -85,5 +85,5 @@ int delete_inode (unsigned int inumber) {
   }
 
   free_bloc(inumber);
-  return inumber;
+  return 1;
 }
