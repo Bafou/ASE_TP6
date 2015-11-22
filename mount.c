@@ -13,10 +13,10 @@ load_current_volume ()
 
     current_volume_str = getenv("CURRENT_VOLUME");
     if (current_volume_str == NULL) {
-      fprintf(stderr, "Current volume can't be set. No environment variable.\n");
-      exit (EXIT_FAILURE);
+      fprintf(stderr, "Current volume can't be set with environment variable. No environment variable is set.\n");
+      current_vol = 0;
     }
-    current_vol = strtol(current_volume_str, NULL, 10);
+    else current_vol = strtol(current_volume_str, NULL, 10);
     load_super(current_vol);
 }
 

@@ -54,19 +54,19 @@ alloc.o : alloc.c alloc.h mbr.o volume.o Driver.o
 ifile.o : ifile.c ifile.h mbr.o volume.o inode.o Driver.o
 	$(CC) -o $@ -c $< $(CFLAGS) $(CLIB)
 
-if_pfile: if_pfile.c mount.o ifile.o
+if_pfile: if_pfile.c mount.o ifile.o mbr.o volume.o inode.o Driver.o alloc.o
 	$(CC) -o $@ $^ $(CFLAGS) $(CLIB)
 
-if_nfile: if_nfile.c mount.o ifile.o
+if_nfile: if_nfile.c mount.o ifile.o mbr.o volume.o inode.o Driver.o alloc.o
 	$(CC) -o $@ $^ $(CFLAGS) $(CLIB)
 
-if_dfile: if_dfile.c mount.o ifile.o
+if_dfile: if_dfile.c mount.o ifile.o mbr.o volume.o inode.o Driver.o alloc.o
 	$(CC) -o $@ $^ $(CFLAGS) $(CLIB)
 
-if_cpfile: if_cpfile.c mount.o ifile.o
+if_cpfile: if_cpfile.c mount.o ifile.o mbr.o volume.o inode.o Driver.o alloc.o
 	$(CC) -o $@ $^ $(CFLAGS) $(CLIB)
 
-if_cfile: if_cfile.c mount.o ifile.o
+if_cfile: if_cfile.c mount.o ifile.o mbr.o volume.o inode.o Driver.o alloc.o
 	$(CC) -o $@ $^ $(CFLAGS) $(CLIB)
 
 if_status: if_status.c mount.o ifile.o
