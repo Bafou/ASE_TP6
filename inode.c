@@ -141,7 +141,6 @@ unsigned int read_indirect_double(unsigned int ind_double, unsigned int fbloc, i
 
 unsigned int vbloc_of_fbloc(unsigned int inumber, unsigned int fbloc, int do_allocate) {
   struct inode_s inode;
-  //int entries_indirect[HDA_SECTORSIZE];
   read_inode(inumber, &inode);
   if (fbloc < NB_ENTRIES_DIRECT) { // searching in direct entries
     if ((inode.direct[fbloc] == BLOC_NULL) && do_allocate) {
