@@ -4,8 +4,9 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include "ifile.h"
+#include <string.h>
 #include "inode.h"
+#include "ifile.h"
 #include "volume.h"
 
 #define DO_ALLOCATE 1
@@ -20,8 +21,8 @@ int delete_ifile(unsigned int inumber){
 }
 
 int open_ifile(struct file_desc_s * fd, unsigned int inumber){
-  struct inode_s;
-  memset(fd,0,sizeof(struct file_desc_s));
+  struct inode_s inode;
+  memset(&fd,0,sizeof(struct file_desc_s));
   read_inode(inumber,&inode);
   fd->inumber = inumber;
   fd->size = inode.size;
@@ -30,11 +31,11 @@ int open_ifile(struct file_desc_s * fd, unsigned int inumber){
 }
 
 void close_ifile(struct file_desc_s * fd){
-  struct inode_s;
+  struct inode_s inode;
   flush_ifile(fd);
   read_inode(fd->inumber,&inode);
   inode.size = fd->size;
-  write_inode(fd->inode,&inode);
+  write_inode(fd->inumber,&inode);
   return;
 }
 
@@ -42,12 +43,15 @@ void flush_ifile(struct file_desc_s * fd){
   unsigned int bloc_to_read;
   if (fd->dirty) {
     bloc_to_read = vbloc_of_fbloc(fd->inumber,(fd->offset/HDA_SECTORSIZE),DO_ALLOCATE);
-    write_bloc(current_vol, bloc_to_read,fd->buffer));
+    write_bloc(current_vol, bloc_to_read,fd->buffer);
     fd->dirty = 0;
   }
 }
 
 void seek_ifile(struct file_desc_s * fd, int r_offset){
+  if (fd->offset + r_offset < 0){
+    fprintf(stderr, "New offset can't be negative.\n");
+  }
   fd->offset += r_offset;
 }
 

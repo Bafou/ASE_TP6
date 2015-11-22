@@ -35,7 +35,7 @@ int main() {
 
   // Initialisation
   assert(init_hardware(HARDWARE_INI));
-  for(i = 0; i < 15; i++)
+  for(i = 0; i < 16; i++)
     IRQVECTOR[i] = empty_it;
 
   if (load_mbr() == 1) {

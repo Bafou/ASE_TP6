@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-m32 -g
 CLIB=-I./include -L./lib -lhardware
-EXEC=dmps frmt frmt_reverse print_vol create_vol remove_vol free_bloc new_bloc test_vol test_alloc
+EXEC=dmps frmt frmt_reverse print_vol create_vol remove_vol free_bloc new_bloc if_pfile if_nfile if_cfile if_dfile if_cpfile
 
 
 all: $(EXEC)
@@ -49,6 +49,27 @@ inode.o : inode.c inode.h mbr.o Driver.o alloc.o
 	$(CC) -o $@ -c $< $(CFLAGS) $(CLIB)
 
 alloc.o : alloc.c alloc.h mbr.o volume.o Driver.o
+	$(CC) -o $@ -c $< $(CFLAGS) $(CLIB)
+
+if_pfile: if_pfile.c mount.o ifile.o
+	$(CC) -o $@ -c $< $(CFLAGS) $(CLIB)
+
+if_nfile: if_nfile.c mount.o ifile.o
+	$(CC) -o $@ -c $< $(CFLAGS) $(CLIB)
+
+if_dfile: if_dfile.c mount.o ifile.o
+	$(CC) -o $@ -c $< $(CFLAGS) $(CLIB)
+
+if_cpfile: if_cpfile.c mount.o ifile.o
+	$(CC) -o $@ -c $< $(CFLAGS) $(CLIB)
+
+if_cfile: if_cfile.c mount.o ifile.o
+		$(CC) -o $@ -c $< $(CFLAGS) $(CLIB)
+
+if_status: if_status.c mount.o ifile.o
+	$(CC) -o $@ -c $< $(CFLAGS) $(CLIB)
+
+mount.o: mount.c volume.o
 	$(CC) -o $@ -c $< $(CFLAGS) $(CLIB)
 
 %.o : %.c
