@@ -47,7 +47,11 @@ int main() {
 
   printf("Il y a %d partions\n",mbr.nb_vol);
   for (i = 0; i < mbr.nb_vol;i++) {
-    printf("Partition %d de type %s :\n\tDébute au cylindre %d et au secteur %d, sa taille est de %d blocs\n", i, get_type(mbr.vol[i].type), mbr.vol[i].cylinder, mbr.vol[i].sector, mbr.vol[i].size);
+    unsigned int cyl_target, sec_target;
+    cyl_target = mbr.vol[i].cylinder + ((mbr.vol[i].sector+mbr.vol[i].size)/ HDA_MAXSECTOR);
+    sec_target = ((mbr.vol[i].sector+mbr.vol[i].size) % HDA_MAXSECTOR) - 1;
+    printf("Partition %d de type %s :\n\tDébut [cylindre %d,secteur %d], fin [cylindre %d,secteur %d], taille: %d blocs\n",
+      i, get_type(mbr.vol[i].type), mbr.vol[i].cylinder, mbr.vol[i].sector, cyl_target, sec_target, mbr.vol[i].size);
   }
   return 0;
 }

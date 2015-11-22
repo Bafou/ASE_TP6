@@ -71,12 +71,12 @@ void load_super(unsigned int vol) {
 void save_super() {
   write_blocn(current_vol,0,(unsigned char *) &superbloc, sizeof(struct superbloc_s));
 }
-void init_super(unsigned int vol, char* name) {
+int init_super(unsigned int vol, char* name) {
   int i;
   load_super(vol);
   if (superbloc.magic == MAGIC_SB) {
     fprintf(stderr, "Superbloc déjà initialisé.\n");
-    exit(EXIT_FAILURE);
+    return 0;
   }
   else {
     int l;
@@ -92,6 +92,6 @@ void init_super(unsigned int vol, char* name) {
       fb.magic = MAGIC_FREE;
       write_blocn(vol, i, (unsigned char *) &fb, sizeof(struct free_bloc_s));
     }
-    printf("Volume %d initialisé\n", vol);
+    return 1;
   }
 }

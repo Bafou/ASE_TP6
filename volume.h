@@ -42,6 +42,6 @@ void load_super(unsigned int vol);
 
 void save_super();
 
-void init_super(unsigned int vol, char* name);
+int init_super(unsigned int vol, char* name);
 
 #endif

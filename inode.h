@@ -19,7 +19,7 @@ struct inode_s {
 	enum file_type_e type;
   int magic;
 	int size;
-	int entries[NB_ENTRIES_DIRECT];
+	int direct[NB_ENTRIES_DIRECT];
 	int indirect1;
 	int indirect2;
 };

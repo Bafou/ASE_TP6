@@ -7,7 +7,7 @@
 #define MAX_VOL 8
 #define MAGIC 0x55aa
 
-enum type_e {
+enum vol_type_e {
   BASE,
   ANNEXE,
   OTHER
@@ -17,7 +17,7 @@ struct volume_s {
   unsigned int cylinder; // begining cylinder
   unsigned int sector; // begining sector
   unsigned int size; // nb of sectors
-  enum type_e type; // the of the volume
+  enum vol_type_e type; // the of the volume
 };
 
 struct mbr_s {

@@ -51,8 +51,8 @@ int delete_inode (unsigned int inumber) {
   read_inode(inumber,&inode);
   // direct blocks
   for (i = 0; i < NB_ENTRIES_DIRECT; i++){
-    if (inode.entries[i]) {
-      free_bloc(inode.entries[i]);
+    if (inode.direct[i]) {
+      free_bloc(inode.direct[i]);
     }
   }
 
