@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
   }
   inumber = strtol(argv[1], NULL, 10);
   mount();
-  delete_ifile(inumber);
+  if (delete_ifile(inumber)) printf("ifile %u deleted\n",inumber );;
   umount();
 
 }

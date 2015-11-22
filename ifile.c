@@ -22,7 +22,7 @@ int delete_ifile(unsigned int inumber){
 
 int open_ifile(struct file_desc_s * fd, unsigned int inumber){
   struct inode_s inode;
-  //memset(&fd,0,sizeof(struct file_desc_s));
+  memset(fd,0,sizeof(struct file_desc_s));
   read_inode(inumber,&inode);
   fd->inumber = inumber;
   fd->size = inode.size;

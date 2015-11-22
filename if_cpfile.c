@@ -9,7 +9,7 @@ int main(int argc, char** argv) {
   unsigned int inumber1, inumber2;
   char c;
   struct file_desc_s fd1, fd2;
-  if (argc != 2) {
+  if (argc != 3) {
     fprintf(stderr, "[%s] usage:\n\t"
             "%s inumber1 inumber2\n", argv[0], argv[0]);
     exit(EXIT_FAILURE);
