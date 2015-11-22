@@ -13,7 +13,8 @@
 #define BLOC_NULL 0
 
 enum file_type_e {
-  AFILE, ADIRECTORY
+  AFILE,
+  ADIRECTORY
 };
 
 struct inode_s {
