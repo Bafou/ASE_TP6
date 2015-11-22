@@ -1,10 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
-#include "include/hardware.h"
-#include "hw_config.h"
 #include "volume.h"
 #include "mbr.h"
+#include "include/hardware.h"
+#include "hw_config.h"
 
 static void
 load_current_volume ()

@@ -97,7 +97,7 @@ unsigned int read_indirect(unsigned int ind, unsigned int fbloc, int do_allocate
       fprintf(stderr, "Error: Impossible to allocate a new bloc, out of memory.\n");
       return BLOC_NULL;
     }
-    write_bloc(current_vol, ind, entries_direct);
+    write_bloc(current_vol, ind, (unsigned char *) entries_direct);
   }
   return entries_direct[fbloc];
 }
