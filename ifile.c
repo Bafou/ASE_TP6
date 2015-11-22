@@ -38,7 +38,8 @@ void flush_ifile(struct file_desc_s * fd){
 }
 
 void seek_ifile(struct file_desc_s * fd, int r_offset){
-
+  flush_ifile(fd);
+  
 }
 
 int readc_ifile(struct file_desc_s * fd){

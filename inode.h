@@ -9,7 +9,8 @@
 #define MAGIC_INODE 0xc1cad0
 #define NB_ENTRIES_DIRECT (HDA_SECTORSIZE - 5*sizeof(int))/sizeof(int)
 #define NB_ENTRIES_INDIRECT HDA_SECTORSIZE/sizeof(int)
-
+#define NB_ENTRIES_TOTAL (NB_ENTRIES_DIRECT + NB_ENTRIES_INDIRECT + NB_ENTRIES_INDIRECT*NB_ENTRIES_INDIRECT)
+#define BLOC_NULL 0
 
 enum file_type_e {
   AFILE, ADIRECTORY
@@ -20,8 +21,8 @@ struct inode_s {
   int magic;
 	int size;
 	int direct[NB_ENTRIES_DIRECT];
-	int indirect1;
-	int indirect2;
+	int indirect;
+	int indirect_double;
 };
 
 void read_inode (unsigned int inumber, struct inode_s *inode);

@@ -56,20 +56,20 @@ int delete_inode (unsigned int inumber) {
     }
   }
 
-  // indirect1 blocks
-  if (inode.indirect1) {
-    read_bloc(current_vol, inode.indirect1, buf1);
+  // indirect blocks
+  if (inode.indirect) {
+    read_bloc(current_vol, inode.indirect, buf1);
     for (i = 0; i < NB_ENTRIES_INDIRECT; i++) {
       if (buf1[i]) {
         free_bloc(buf1[i]);
       }
     }
-    free_bloc(inode.indirect1);
+    free_bloc(inode.indirect);
   }
 
-  // indirect2 blocks
-  if (inode.indirect2) {
-    read_bloc(current_vol, inode.indirect2, buf1);
+  // indirect_double blocks
+  if (inode.indirect_double) {
+    read_bloc(current_vol, inode.indirect_double, buf1);
     for (i = 0; i < NB_ENTRIES_INDIRECT; i++) {
       if (buf1[i]) {
         read_bloc(current_vol, buf1[i], buf2);
@@ -81,9 +81,110 @@ int delete_inode (unsigned int inumber) {
         free_bloc(buf1[i]);
       }
     }
-    free_bloc(inode.indirect2);
+    free_bloc(inode.indirect_double);
   }
 
   free_bloc(inumber);
   return 1;
+}
+
+unsigned int read_indirect(unsigned int ind, unsigned int fbloc, int do_allocate) {
+  int entries_direct[HDA_SECTORSIZE];
+  read_bloc(current_vol, ind, (unsigned char *) entries_direct);
+  if (entries_direct[fbloc] == BLOC_NULL && do_allocate) {
+    entries_direct[fbloc] = new_bloc();
+    if (entries_direct[fbloc] == -1) {
+      fprintf(stderr, "Error: Impossible to allocate a new bloc, out of memory.\n");
+      return BLOC_NULL;
+    }
+    write_bloc(current_vol, ind, entries_direct);
+  }
+  return entries_direct[fbloc];
+}
+
+unsigned int read_indirect_double(unsigned int ind_double, unsigned int fbloc, int do_allocate) {
+  int entries_indirect[HDA_SECTORSIZE];
+  unsigned int res;
+  // load first indirection in entries_indirect
+  read_bloc(current_vol, ind_double, (unsigned char *) entries_indirect);
+  if (entries_indirect[fbloc/NB_ENTRIES_INDIRECT] == BLOC_NULL) {
+    if (!do_allocate){
+      return BLOC_NULL;
+    }
+    else {
+      entries_indirect[fbloc/NB_ENTRIES_INDIRECT] = new_bloc();
+      if (entries_indirect[fbloc/NB_ENTRIES_INDIRECT] == - 1) {
+        fprintf(stderr, "Error: Impossible to allocate a new bloc, out of memory.\n");
+        return BLOC_NULL;
+      }
+      write_bloc(current_vol, ind_double, (unsigned char *) entries_indirect);
+    }
+  }
+  // load second indirection in entries_indirect
+  res = entries_indirect[fbloc/NB_ENTRIES_INDIRECT];
+  read_bloc(current_vol, res, (unsigned char *) entries_indirect);
+  if (entries_indirect[fbloc%NB_ENTRIES_INDIRECT] == BLOC_NULL) {
+    if (!do_allocate) {
+      return BLOC_NULL;
+    }
+    else {
+      entries_indirect[fbloc%NB_ENTRIES_INDIRECT] = new_bloc();
+      if (entries_indirect[fbloc%NB_ENTRIES_INDIRECT] == - 1) {
+        fprintf(stderr, "Error: Impossible to allocate a new bloc, out of memory.\n");
+        return BLOC_NULL;
+      }
+      write_bloc(current_vol, res, (unsigned char *) entries_indirect);
+    }
+  }
+  return entries_indirect[fbloc%NB_ENTRIES_INDIRECT];
+}
+
+unsigned int vbloc_of_fbloc(unsigned int inumber, unsigned int fbloc, int do_allocate) {
+  struct inode_s inode;
+  //int entries_indirect[HDA_SECTORSIZE];
+  read_inode(inumber, &inode);
+  if (fbloc < NB_ENTRIES_DIRECT) { // searching in direct entries
+    if ((inode.direct[fbloc] == BLOC_NULL) && do_allocate) {
+      inode.direct[fbloc] = new_bloc();
+      if (inode.direct[fbloc] == -1) {
+        fprintf(stderr, "Error: Impossible to allocate a new bloc, out of memory.\n");
+        return BLOC_NULL;
+      }
+      write_inode(inumber, &inode);
+    }
+    return inode.direct[fbloc];
+  }
+  else if (fbloc < (NB_ENTRIES_DIRECT + NB_ENTRIES_INDIRECT)) { // searching in indirect entries
+    if (inode.indirect == BLOC_NULL) {
+      if (!do_allocate){
+        return BLOC_NULL;
+      }
+      else {
+        inode.indirect = new_bloc();
+        if (inode.indirect_double == -1) {
+          fprintf(stderr, "Error: Impossible to allocate a new bloc, out of memory.\n");
+          return BLOC_NULL;
+        }
+        write_inode(inumber, &inode);
+      }
+    }
+    return read_indirect(inode.indirect, fbloc - NB_ENTRIES_DIRECT,do_allocate);
+  }
+  else if (fbloc < NB_ENTRIES_TOTAL) { // searching in indirect double entries
+    if (inode.indirect_double == BLOC_NULL) {
+      if (!do_allocate){
+        return BLOC_NULL;
+      }
+      else {
+        inode.indirect_double = new_bloc();
+        if (inode.indirect_double == -1) {
+          fprintf(stderr, "Error: Impossible to allocate a new bloc, out of memory.\n");
+          return BLOC_NULL;
+        }
+        write_inode(inumber, &inode);
+      }
+    }
+    return read_indirect_double(inode.indirect_double, fbloc-(NB_ENTRIES_DIRECT+NB_ENTRIES_INDIRECT), do_allocate);
+  }
+  return BLOC_NULL;
 }
