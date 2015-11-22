@@ -50,8 +50,9 @@ int main() {
     unsigned int cyl_target, sec_target;
     cyl_target = mbr.vol[i].cylinder + ((mbr.vol[i].sector+mbr.vol[i].size)/ HDA_MAXSECTOR);
     sec_target = ((mbr.vol[i].sector+mbr.vol[i].size) % HDA_MAXSECTOR) - 1;
-    printf("Partition %d de type %s :\n\tDébut [cylindre %d,secteur %d], fin [cylindre %d,secteur %d], taille: %d blocs\n",
-      i, get_type(mbr.vol[i].type), mbr.vol[i].cylinder, mbr.vol[i].sector, cyl_target, sec_target, mbr.vol[i].size);
+    load_super(i);
+    printf("Partition (%s) %d de type %s :\n\tDébut [cylindre %d,secteur %d], fin [cylindre %d,secteur %d], taille: %d blocs, nombre de blocs libres: %d.\n",
+      superbloc.name, i, get_type(mbr.vol[i].type), mbr.vol[i].cylinder, mbr.vol[i].sector, cyl_target, sec_target, mbr.vol[i].size, superbloc.nb_free);
   }
   return 0;
 }
